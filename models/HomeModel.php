@@ -1,8 +1,7 @@
 <?php
 class HomeModel{
-    public function getDatos($parametro)
+    public function getDatos()
     {
-        return 'Mensaje desde el modelo: ' . $parametro;
     }
 }
 ?>

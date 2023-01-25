@@ -4,10 +4,10 @@ class Home extends Controller{
     {
         parent::__construct();
     }
-    public function index($parametro)
+    public function index()
     {
-        $data = $this->model->getDatos($parametro);
-        $this->views->View('principal', 'login', $data);
+        
+        $this->views->View('principal', 'login');
     }
 }
 

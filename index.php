@@ -2,7 +2,7 @@
 require_once 'config/Config.php';
 $ruta = (!empty($_GET['url'])) ? $_GET['url'] : 'home/index';
 $array = explode('/', $ruta);
-$controller = $array[0];
+$controller = ucfirst($array[0]);
 $metodo = 'index';
 $parametro = '';
 if (!empty($array[1])) {
@@ -17,5 +17,18 @@ if (!empty($array[2])) {
         }
         $parametro = trim($parametro, ',');
     }
+}
+require_once 'config/app/Autoload.php';
+$dirControllorer = 'controllers/' . $controller . '.php';
+if (file_exists($dirControllorer)) {
+    require_once $dirControllorer;
+    $controller = new $controller();
+    if (method_exists($controller, $metodo)) {
+        $controller->$metodo($parametro);
+    }else {
+        echo 'No existe el metodo';
+    }
+}else {
+    echo 'No existe el controlador';
 }
 ?>

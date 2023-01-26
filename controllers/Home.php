@@ -13,10 +13,16 @@ class Home extends Controller{
     public function validar()
     {
         if (isset($_POST['correo']) && isset($_POST['clave'])) {
-            echo 'Si existe';
-        }else{
-            echo 'No existe';
+            if (empty($_POST['correo'])) {
+                $res = array('msg' => 'El correo es necesario');
+            }else if(empty($_POST['clave'])) {
+                $res = array('msg' => 'La contraseña es necesario');
+            }else{
+
+            }
+            echo json_encode($res, JSON_UNESCAPED_UNICODE);
         }
+        die();
     }
 }
 

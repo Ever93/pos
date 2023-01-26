@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-01-2023 a las 17:17:42
--- Versión del servidor: 10.1.38-MariaDB
--- Versión de PHP: 5.6.40
+-- Tiempo de generación: 26-01-2023 a las 22:23:38
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -31,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `abonos` (
   `id` int(11) NOT NULL,
   `abono` decimal(20,2) NOT NULL,
-  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `id_credito` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
@@ -43,13 +42,13 @@ CREATE TABLE `abonos` (
 
 CREATE TABLE `apartados` (
   `id` int(11) NOT NULL,
-  `productos` longtext COLLATE utf8_spanish_ci NOT NULL,
-  `fecha_apartado` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `productos` longtext NOT NULL,
+  `fecha_apartado` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `fecha_retiro` datetime NOT NULL,
   `abono` decimal(20,2) NOT NULL,
   `total` decimal(20,2) NOT NULL,
-  `color` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
-  `estado` int(11) NOT NULL DEFAULT '1',
+  `color` varchar(20) NOT NULL,
+  `estado` int(11) NOT NULL DEFAULT 1,
   `id_cliente` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
@@ -66,7 +65,7 @@ CREATE TABLE `cajas` (
   `fecha_cierre` date NOT NULL,
   `monto_final` decimal(20,2) NOT NULL,
   `total_ventas` int(11) NOT NULL,
-  `estado` int(11) NOT NULL DEFAULT '1',
+  `estado` int(11) NOT NULL DEFAULT 1,
   `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
@@ -78,9 +77,9 @@ CREATE TABLE `cajas` (
 
 CREATE TABLE `categorias` (
   `id` int(11) NOT NULL,
-  `categoria` varchar(150) COLLATE utf8_spanish_ci NOT NULL,
-  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `estado` int(11) NOT NULL DEFAULT '1'
+  `categoria` varchar(150) NOT NULL,
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `estado` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
@@ -91,13 +90,13 @@ CREATE TABLE `categorias` (
 
 CREATE TABLE `clientes` (
   `id` int(11) NOT NULL,
-  `identidad` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `num_identidad` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
-  `nombre` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
-  `telefono` varchar(60) COLLATE utf8_spanish_ci NOT NULL,
-  `direccion` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
-  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `estado` int(11) NOT NULL DEFAULT '1'
+  `identidad` varchar(100) NOT NULL,
+  `num_identidad` varchar(20) NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `telefono` varchar(60) NOT NULL,
+  `direccion` varchar(255) NOT NULL,
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `estado` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
@@ -108,12 +107,12 @@ CREATE TABLE `clientes` (
 
 CREATE TABLE `compras` (
   `id` int(11) NOT NULL,
-  `productos` longtext COLLATE utf8_spanish_ci NOT NULL,
+  `productos` longtext NOT NULL,
   `total` decimal(10,0) NOT NULL,
   `fecha` date NOT NULL,
   `hora` time NOT NULL,
-  `serie` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
-  `estado` int(11) NOT NULL DEFAULT '1',
+  `serie` varchar(50) NOT NULL,
+  `estado` int(11) NOT NULL DEFAULT 1,
   `id_proveedor` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
@@ -126,12 +125,12 @@ CREATE TABLE `compras` (
 
 CREATE TABLE `configuracion` (
   `id` int(11) NOT NULL,
-  `ruc` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
-  `nombre` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
-  `telefono` varchar(60) COLLATE utf8_spanish_ci NOT NULL,
-  `correo` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `direccion` text COLLATE utf8_spanish_ci NOT NULL,
-  `mensaje` text COLLATE utf8_spanish_ci NOT NULL,
+  `ruc` varchar(20) NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `telefono` varchar(60) NOT NULL,
+  `correo` varchar(100) NOT NULL,
+  `direccion` text NOT NULL,
+  `mensaje` text NOT NULL,
   `impuesto` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
@@ -143,7 +142,7 @@ CREATE TABLE `configuracion` (
 
 CREATE TABLE `cotizaciones` (
   `id` int(11) NOT NULL,
-  `productos` longtext COLLATE utf8_spanish_ci NOT NULL,
+  `productos` longtext NOT NULL,
   `total` decimal(20,2) NOT NULL,
   `fecha` date NOT NULL,
   `hora` time NOT NULL,
@@ -160,8 +159,8 @@ CREATE TABLE `cotizaciones` (
 CREATE TABLE `creditos` (
   `id` int(11) NOT NULL,
   `monto` decimal(20,2) NOT NULL,
-  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `estado` int(11) NOT NULL DEFAULT '1',
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `estado` int(11) NOT NULL DEFAULT 1,
   `id_venta` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
@@ -174,8 +173,8 @@ CREATE TABLE `creditos` (
 CREATE TABLE `gastos` (
   `id` int(11) NOT NULL,
   `monto` decimal(20,0) NOT NULL,
-  `descripcion` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
-  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `descripcion` varchar(255) NOT NULL,
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
@@ -187,8 +186,8 @@ CREATE TABLE `gastos` (
 
 CREATE TABLE `inventario` (
   `id` int(11) NOT NULL,
-  `entradas` int(11) NOT NULL DEFAULT '0',
-  `salidas` int(11) NOT NULL DEFAULT '0',
+  `entradas` int(11) NOT NULL DEFAULT 0,
+  `salidas` int(11) NOT NULL DEFAULT 0,
   `fecha` date NOT NULL,
   `id_producto` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL
@@ -202,10 +201,10 @@ CREATE TABLE `inventario` (
 
 CREATE TABLE `medidas` (
   `id` int(11) NOT NULL,
-  `medida` varchar(150) COLLATE utf8_spanish_ci NOT NULL,
-  `nombre_corto` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
-  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `estado` int(11) NOT NULL DEFAULT '1'
+  `medida` varchar(150) NOT NULL,
+  `nombre_corto` varchar(20) NOT NULL,
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `estado` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
@@ -216,15 +215,15 @@ CREATE TABLE `medidas` (
 
 CREATE TABLE `productos` (
   `id` int(11) NOT NULL,
-  `codigo` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
-  `descripcion` text COLLATE utf8_spanish_ci NOT NULL,
+  `codigo` varchar(10) NOT NULL,
+  `descripcion` text NOT NULL,
   `precio_compra` decimal(20,2) NOT NULL,
   `precio_venta` decimal(20,2) NOT NULL,
-  `cantidad` int(11) NOT NULL DEFAULT '0',
-  `foto` varchar(150) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `estado` int(11) NOT NULL DEFAULT '1',
-  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `ventas` int(11) NOT NULL DEFAULT '0',
+  `cantidad` int(11) NOT NULL DEFAULT 0,
+  `foto` varchar(150) DEFAULT NULL,
+  `estado` int(11) NOT NULL DEFAULT 1,
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `ventas` int(11) NOT NULL DEFAULT 0,
   `id_medida` int(11) NOT NULL,
   `id_categoria` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
@@ -237,12 +236,12 @@ CREATE TABLE `productos` (
 
 CREATE TABLE `proveedor` (
   `id` int(11) NOT NULL,
-  `ruc` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
-  `nombre` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
-  `telefono` varchar(60) COLLATE utf8_spanish_ci NOT NULL,
-  `direccion` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
-  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `estado` int(11) NOT NULL DEFAULT '1'
+  `ruc` varchar(20) NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `telefono` varchar(60) NOT NULL,
+  `direccion` varchar(255) NOT NULL,
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `estado` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
@@ -253,18 +252,25 @@ CREATE TABLE `proveedor` (
 
 CREATE TABLE `usuarios` (
   `id` int(11) NOT NULL,
-  `nombre` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
-  `apellido` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
-  `correo` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
-  `telefono` varchar(60) COLLATE utf8_spanish_ci NOT NULL,
-  `direccion` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
-  `perfil` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
-  `clave` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
-  `token` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
-  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `estado` int(11) NOT NULL DEFAULT '1',
+  `nombre` varchar(200) NOT NULL,
+  `apellido` varchar(200) NOT NULL,
+  `correo` varchar(200) NOT NULL,
+  `telefono` varchar(60) NOT NULL,
+  `direccion` varchar(255) NOT NULL,
+  `perfil` varchar(200) DEFAULT NULL,
+  `clave` varchar(200) NOT NULL,
+  `token` varchar(200) DEFAULT NULL,
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `estado` int(11) NOT NULL DEFAULT 1,
   `rol` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `usuarios`
+--
+
+INSERT INTO `usuarios` (`id`, `nombre`, `apellido`, `correo`, `telefono`, `direccion`, `perfil`, `clave`, `token`, `fecha`, `estado`, `rol`) VALUES
+(1, 'Ever', 'Benitez', 'informaticoebz@gmail.com', '0971104575', 'Tte', '', '$2y$10$EkiyuHF7hjN7tkDBfAUqfu.HsM0tX/jXeiiimXF4XM7oavfsRCosO', '', '2023-01-26 20:40:24', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -274,12 +280,12 @@ CREATE TABLE `usuarios` (
 
 CREATE TABLE `ventas` (
   `id` int(11) NOT NULL,
-  `productos` longtext COLLATE utf8_spanish_ci NOT NULL,
+  `productos` longtext NOT NULL,
   `total` decimal(20,2) NOT NULL,
   `fecha` date NOT NULL,
   `hora` time NOT NULL,
-  `estado` int(11) NOT NULL DEFAULT '1',
-  `apertura` int(11) NOT NULL DEFAULT '1',
+  `estado` int(11) NOT NULL DEFAULT 1,
+  `apertura` int(11) NOT NULL DEFAULT 1,
   `id_cliente` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
@@ -490,7 +496,7 @@ ALTER TABLE `proveedor`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `ventas`

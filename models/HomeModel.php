@@ -1,5 +1,8 @@
 <?php
-class HomeModel{
+class HomeModel extends Query{
+    public function __construct() {
+        parent::__construct();
+    }
     public function getDatos()
     {
     }

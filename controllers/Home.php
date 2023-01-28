@@ -7,7 +7,7 @@ class Home extends Controller{
     public function index()
     {
         $data['title'] = 'Iniciar Sesion';
-        $this->views->View('principal', 'login', $data);
+        $this->views->getView('principal', 'login', $data);
     }
     //Validar Formulario de login
     public function validar()
@@ -27,7 +27,7 @@ class Home extends Controller{
                     if (password_verify($clave, $data['clave'])) {
                         $_SESSION['nombre_usuario'] = $data['nombre'];
                         $_SESSION['correo_usuario'] = $data['correo'];
-                        $res = array('msg' => 'DATOS CORRECTO', 'type' => 'success');
+                        $res = array('msg' => 'Datos Correctos', 'type' => 'success');
                     }else{
                         $res = array('msg' => 'Contraseña Incorrecta', 'type' => 'warning');
                     }

@@ -8,7 +8,7 @@
 <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
 <!--End Back To Top Button-->
 <footer class="page-footer">
-    <p class="mb-0">Copyright © <?php echo date('Y'); ?>. Todos los derechos reservados.</p>
+    <p class="mb-0">Copyright © <?php echo date('Y'); ?>. <a href="https://api.whatsapp.com/send/?phone=595971104575">SmartCenter-Paraguay</a>. Todos los derechos reservados. <b>Version</b> 0.0.1</p>
 </footer>
 </div>
 <!--end wrapper-->

@@ -1695,7 +1695,7 @@ a {
 
 .split-bg-danger {
 	background-color: #e20e22;
-	border-color: #e20e22
+	border-color: #e20e22;
 }
 
 .bg-facebook {
@@ -2602,4 +2602,8 @@ input.search-control-2::placeholder {
 	.chat-top-header-menu {
 		display: none
 	}
+}
+
+.ui-autocomplete{
+	z-index: 10000;
 }

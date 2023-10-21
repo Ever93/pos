@@ -9,7 +9,7 @@ const clave = document.querySelector('#clave');
 const rol = document.querySelector('#rol');
 const id = document.querySelector('#id');
 
-//elementos para mostrar errores
+//elementos para mostor errore
 const errorNombre = document.querySelector('#errorNombre');
 const errorApellido = document.querySelector('#errorApellido');
 const errorCorreo = document.querySelector('#errorCorreo');
@@ -19,9 +19,10 @@ const errorClave = document.querySelector('#errorClave');
 const errorRol = document.querySelector('#errorRol');
 
 const btnAccion = document.querySelector('#btnAccion');
+const btnNuevo = document.querySelector('#btnNuevo');
 
 document.addEventListener('DOMContentLoaded', function () {
-    //cargar datos con plugin datatable
+    //cargar datos con el plugin datatables
     tblUsuarios = $('#tblUsuarios').DataTable({
         ajax: {
             url: base_url + 'usuarios/listar',
@@ -43,103 +44,48 @@ document.addEventListener('DOMContentLoaded', function () {
         responsive: true,
         order: [[0, 'asc']],
     });
+    //Limpiar Campos
+    btnNuevo.addEventListener('click', function () {
+        id.value = '';
+        btnAccion.textContent = 'Registrar';
+        clave.removeAttribute('readonly');
+        formulario.reset();
+        nombres.focus();
+        limpiarCampos();
+    })
     //registrar usuarios
     formulario.addEventListener('submit', function (e) {
         e.preventDefault();
-        errorNombre.textContent = '';
-        errorApellido.textContent = '';
-        errorCorreo.textContent = '';
-        errorTelefono.textContent = '';
-        errorDireccion.textContent = '';
-        errorClave.textContent = '';
-        errorRol.textContent = '';
+        limpiarCampos();
         if (nombres.value == '') {
-            errorNombre.textContent = 'El nombre es requerido';
+            errorNombre.textContent = 'EL NOMBRE ES REQUERIDO';
         } else if (apellidos.value == '') {
-            errorApellido.textContent = 'El apellido es requerido';
+            errorApellido.textContent = 'EL APELLIDO ES REQUERIDO';
         } else if (correo.value == '') {
-            errorCorreo.textContent = 'El correo es requerido';
+            errorCorreo.textContent = 'EL CORREO ES REQUERIDO';
         } else if (telefono.value == '') {
-            errorTelefono.textContent = 'El telefono es requerido';
+            errorTelefono.textContent = 'EL TELEFONO ES REQUERIDO';
         } else if (direccion.value == '') {
-            errorDireccion.textContent = 'La dirección es requerida';
+            errorDireccion.textContent = 'LA DIRECCION ES REQUERIDO';
         } else if (clave.value == '') {
-            errorClave.textContent = 'La clave es requerida';
+            errorClave.textContent = 'LA CONTRASEÑA ES REQUERIDO';
         } else if (rol.value == '') {
-            errorRol.textContent = 'El rol es requerido';
+            errorRol.textContent = 'EL ROL ES REQUERIDO';
         } else {
             const url = base_url + 'usuarios/registrar';
-            //crear formData
-            const data = new FormData(this);
-            //hacer una instancia del objeto XMLHttpRequest 
-            const http = new XMLHttpRequest();
-            //Abrir una Conexion - POST - GET
-            http.open('POST', url, true);
-            //Enviar Datos
-            http.send(data);
-            //verificar estados
-            http.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    const res = JSON.parse(this.responseText);
-                    Swal.fire({
-                        toast: true,
-                        position: 'top-right',
-                        icon: res.type,
-                        title: res.msg,
-                        showConfirmButton: false,
-                        timer: 2000
-                    })
-                    if (res.type == 'success') {
-                        formulario.reset();
-                        tblUsuarios.ajax.reload();
-                    }
-                }
-            }
+            insertarRegistros(url, this, tblUsuarios, btnAccion, true);
         }
     })
 
 })
-//funcion para eliminar usuarios
+//function para elimnar usuario
 function eliminarUsuario(idUsuario) {
-    Swal.fire({
-        title: 'Estas seguro de eliminar?',
-        text: "El registro no se eliminara de forma permanente, solo cambiara el estado!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Eliminar!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const url = base_url + 'usuarios/eliminar/' + idUsuario;
-            //hacer una instancia del objeto XMLHttpRequest 
-            const http = new XMLHttpRequest();
-            //Abrir una Conexion - POST - GET
-            http.open('GET', url, true);
-            //Enviar Datos
-            http.send();
-            //verificar estados
-            http.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    const res = JSON.parse(this.responseText);
-                    Swal.fire({
-                        toast: true,
-                        position: 'top-right',
-                        icon: res.type,
-                        title: res.msg,
-                        showConfirmButton: false,
-                        timer: 2000
-                    })
-                    if (res.type == 'success') {
-                        tblUsuarios.ajax.reload();
-                    }
-                }
-            }
-        }
-    })
+    const url = base_url + 'usuarios/eliminar/' + idUsuario;
+    eliminarRegistros(url, tblUsuarios);
 }
-//funcion para recuperar los datos
+// function para recuperar los datos
 function editarUsuario(idUsuario) {
+    limpiarCampos();
     const url = base_url + 'usuarios/editar/' + idUsuario;
     //hacer una instancia del objeto XMLHttpRequest 
     const http = new XMLHttpRequest();
@@ -161,9 +107,16 @@ function editarUsuario(idUsuario) {
             clave.value = '0000000';
             clave.setAttribute('readonly', 'readonly');
             btnAccion.textContent = 'Actualizar';
-            const firstTabEl = document.querySelector('#nav-tab button:last-child')
-            const firstTab = new bootstrap.Tab(firstTabEl)
             firstTab.show()
         }
     }
+}
+function limpiarCampos() {
+    errorNombre.textContent = '';
+    errorApellido.textContent = '';
+    errorCorreo.textContent = '';
+    errorTelefono.textContent = '';
+    errorDireccion.textContent = '';
+    errorClave.textContent = '';
+    errorRol.textContent = '';
 }

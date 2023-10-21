@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--favicon-->
-    <link rel="icon" href="<?php echo BASE_URL; ?>assets/images/favicon-32x32.png" type="image/png" />
+    <link rel="shortcut icon" type="image/x-icon" href="<?php echo BASE_URL; ?>assets/images/favicon.ico">
     <!--plugins-->
     <link href="<?php echo BASE_URL; ?>assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
     <link href="<?php echo BASE_URL; ?>assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
@@ -31,7 +31,7 @@
                 <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3">
                     <div class="col mx-auto">
                         <div class="mb-4 text-center">
-                            <img src="<?php echo BASE_URL; ?>assets/images/logo-img.png" width="180" alt="" />
+                            <img src="<?php echo BASE_URL; ?>assets/images/logo.png" width="180" alt="" />
                         </div>
                         <div class="card">
                             <div class="card-body">
@@ -57,7 +57,7 @@
                                                 </div>
                                                 <span id="errorClave" class="text-danger"></span>
                                             </div>
-                                            <div class="col-md-12 text-end"> <a href="authentication-forgot-password.html">Olvidaste tu contraseña?</a>
+                                            <div class="col-md-12 text-end"> <a href="<?php echo BASE_URL . 'principal/forgot'; ?>">Olvidaste tu contraseña?</a>
                                             </div>
                                             <div class="col-12">
                                                 <div class="d-grid">

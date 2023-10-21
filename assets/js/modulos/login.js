@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (clave.value == '') {
             errorClave.textContent = 'LA CONTRASEÑA ES REQUERIDO';
         } else {
-            const url = base_url + 'home/validar';
+            const url = base_url + 'principal/validar';
             //crear formData
             const data = new FormData(this);
             //hacer una instancia del objeto XMLHttpRequest 
@@ -28,18 +28,21 @@ document.addEventListener('DOMContentLoaded', function () {
             http.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     const res = JSON.parse(this.responseText);
-                    Swal.fire(
-                        'Mensaje?',
-                        res.msg,
-                        res.type //este type viene del controlador
-                    )
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-right',
+                        icon: res.type,
+                        title: res.msg,
+                        showConfirmButton: false,
+                        timer: 3000
+                    })
                     if (res.type == 'success') {
                         setTimeout(() => {
                             let timerInterval
                             Swal.fire({
-                                title: res.msg,
+                                title: 'BIENVENIDO',
                                 html: 'Será redireccionado en <b></b> milliseconds.',
-                                timer: 1000,
+                                timer: 2000,
                                 timerProgressBar: true,
                                 didOpen: () => {
                                     Swal.showLoading()

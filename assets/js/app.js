@@ -54,28 +54,40 @@ $(function() {
 			$(".switcher-wrapper").removeClass("switcher-toggled")
 		}), $("#lightmode").on("click", function() {
 			$("html").attr("class", "light-theme")
+			saveBackground()
 		}), $("#darkmode").on("click", function() {
 			$("html").attr("class", "dark-theme")
+			saveBackground()
 		}), $("#semidark").on("click", function() {
 			$("html").attr("class", "semi-dark")
+			saveBackground()
 		}), $("#minimaltheme").on("click", function() {
 			$("html").attr("class", "minimal-theme")
+			saveBackground()
 		}), $("#headercolor1").on("click", function() {
 			$("html").addClass("color-header headercolor1"), $("html").removeClass("headercolor2 headercolor3 headercolor4 headercolor5 headercolor6 headercolor7 headercolor8")
+			saveBackground()
 		}), $("#headercolor2").on("click", function() {
 			$("html").addClass("color-header headercolor2"), $("html").removeClass("headercolor1 headercolor3 headercolor4 headercolor5 headercolor6 headercolor7 headercolor8")
+			saveBackground()
 		}), $("#headercolor3").on("click", function() {
 			$("html").addClass("color-header headercolor3"), $("html").removeClass("headercolor1 headercolor2 headercolor4 headercolor5 headercolor6 headercolor7 headercolor8")
+			saveBackground()
 		}), $("#headercolor4").on("click", function() {
 			$("html").addClass("color-header headercolor4"), $("html").removeClass("headercolor1 headercolor2 headercolor3 headercolor5 headercolor6 headercolor7 headercolor8")
+			saveBackground()
 		}), $("#headercolor5").on("click", function() {
 			$("html").addClass("color-header headercolor5"), $("html").removeClass("headercolor1 headercolor2 headercolor4 headercolor3 headercolor6 headercolor7 headercolor8")
+			saveBackground()
 		}), $("#headercolor6").on("click", function() {
 			$("html").addClass("color-header headercolor6"), $("html").removeClass("headercolor1 headercolor2 headercolor4 headercolor5 headercolor3 headercolor7 headercolor8")
+			saveBackground()
 		}), $("#headercolor7").on("click", function() {
 			$("html").addClass("color-header headercolor7"), $("html").removeClass("headercolor1 headercolor2 headercolor4 headercolor5 headercolor6 headercolor3 headercolor8")
+			saveBackground()
 		}), $("#headercolor8").on("click", function() {
 			$("html").addClass("color-header headercolor8"), $("html").removeClass("headercolor1 headercolor2 headercolor4 headercolor5 headercolor6 headercolor7 headercolor3")
+			saveBackground()
 		})
 		
 	// sidebar colors 
@@ -90,33 +102,51 @@ $(function() {
 
 	function theme1() {
 		$('html').attr('class', 'color-sidebar sidebarcolor1');
+		saveBackground()
 	}
 
 	function theme2() {
 		$('html').attr('class', 'color-sidebar sidebarcolor2');
+		saveBackground()
 	}
 
 	function theme3() {
 		$('html').attr('class', 'color-sidebar sidebarcolor3');
+		saveBackground()
 	}
 
 	function theme4() {
 		$('html').attr('class', 'color-sidebar sidebarcolor4');
+		saveBackground()
 	}
 
 	function theme5() {
 		$('html').attr('class', 'color-sidebar sidebarcolor5');
+		saveBackground()
 	}
 
 	function theme6() {
 		$('html').attr('class', 'color-sidebar sidebarcolor6');
+		saveBackground()
 	}
 
 	function theme7() {
 		$('html').attr('class', 'color-sidebar sidebarcolor7');
+		saveBackground()
 	}
 
 	function theme8() {
 		$('html').attr('class', 'color-sidebar sidebarcolor8');
+		saveBackground()
+	}
+
+	function saveBackground() {
+		const color = document.querySelector('html').getAttribute('class');
+		localStorage.setItem('color-theme', color);
+	}
+
+	if (localStorage.getItem('color-theme') != null) {
+		const bg = localStorage.getItem('color-theme');
+		$('html').attr('class', bg);		
 	}
 });

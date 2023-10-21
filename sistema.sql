@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-10-2023 a las 22:52:03
+-- Tiempo de generación: 21-10-2023 a las 21:51:28
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.0.28
 
@@ -31,8 +31,35 @@ CREATE TABLE `abonos` (
   `id` int(11) NOT NULL,
   `abono` decimal(10,2) NOT NULL,
   `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `id_credito` int(11) NOT NULL
+  `apertura` int(11) NOT NULL DEFAULT 1,
+  `id_credito` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `acceso`
+--
+
+CREATE TABLE `acceso` (
+  `id` int(11) NOT NULL,
+  `evento` varchar(30) NOT NULL,
+  `ip` varchar(50) NOT NULL,
+  `detalle` text NOT NULL,
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `acceso`
+--
+
+INSERT INTO `acceso` (`id`, `evento`, `ip`, `detalle`, `fecha`) VALUES
+(1, 'Inicio de Sesión', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36', '2023-10-21 19:44:05'),
+(2, 'Cierre de Sesión', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36', '2023-10-21 19:45:09'),
+(3, 'Inicio de Sesión', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36', '2023-10-21 19:45:16'),
+(4, 'Cierre de Sesión', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36', '2023-10-21 19:47:26'),
+(5, 'Inicio de Sesión', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36', '2023-10-21 19:47:28');
 
 -- --------------------------------------------------------
 
@@ -43,13 +70,15 @@ CREATE TABLE `abonos` (
 CREATE TABLE `apartados` (
   `id` int(11) NOT NULL,
   `productos` longtext NOT NULL,
-  `fecha_apartado` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `fecha_create` date DEFAULT NULL,
+  `fecha_apartado` datetime NOT NULL,
   `fecha_retiro` datetime NOT NULL,
   `abono` decimal(10,2) NOT NULL,
   `total` decimal(10,2) NOT NULL,
   `color` varchar(15) NOT NULL,
   `estado` int(11) NOT NULL DEFAULT 1,
-  `id_cliente` int(11) NOT NULL
+  `id_cliente` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -62,9 +91,11 @@ CREATE TABLE `cajas` (
   `id` int(11) NOT NULL,
   `monto_inicial` decimal(10,2) NOT NULL,
   `fecha_apertura` date NOT NULL,
-  `fecha_cierre` date NOT NULL,
-  `monto_final` decimal(10,2) NOT NULL,
-  `total_ventas` int(11) NOT NULL,
+  `fecha_cierre` date DEFAULT NULL,
+  `monto_final` decimal(10,2) DEFAULT NULL,
+  `total_ventas` int(11) DEFAULT NULL,
+  `egresos` decimal(10,2) DEFAULT NULL,
+  `gastos` decimal(10,2) DEFAULT NULL,
   `estado` int(11) NOT NULL DEFAULT 1,
   `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -93,7 +124,8 @@ CREATE TABLE `clientes` (
   `identidad` varchar(50) NOT NULL,
   `num_identidad` varchar(15) NOT NULL,
   `nombre` varchar(255) NOT NULL,
-  `telefono` varchar(50) NOT NULL,
+  `telefono` varchar(15) NOT NULL,
+  `correo` varchar(100) DEFAULT NULL,
   `direccion` varchar(255) NOT NULL,
   `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `estado` int(11) NOT NULL DEFAULT 1
@@ -108,11 +140,12 @@ CREATE TABLE `clientes` (
 CREATE TABLE `compras` (
   `id` int(11) NOT NULL,
   `productos` longtext NOT NULL,
-  `total` decimal(10,0) NOT NULL,
+  `total` decimal(10,2) NOT NULL,
   `fecha` date NOT NULL,
   `hora` time NOT NULL,
   `serie` varchar(20) NOT NULL,
   `estado` int(11) NOT NULL DEFAULT 1,
+  `apertura` int(11) NOT NULL DEFAULT 1,
   `id_proveedor` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -131,8 +164,15 @@ CREATE TABLE `configuracion` (
   `correo` varchar(100) NOT NULL,
   `direccion` text NOT NULL,
   `mensaje` text NOT NULL,
-  `impuesto` int(11) NOT NULL
+  `impuesto` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `configuracion`
+--
+
+INSERT INTO `configuracion` (`id`, `ruc`, `nombre`, `telefono`, `correo`, `direccion`, `mensaje`, `impuesto`) VALUES
+(1, '23999999999', 'VIDA INFORMATICO', '900897537', 'angelsifuentes2580@gmail.com', 'LIMA - PERÚ', '<p>GRACIAS POR SU PREFERENCIA SI TIENES <strong>DUDAS</strong> VISITA <a href=\"http://angelsifuentes.com/\">MI PAGINA WEB</a></p>', 0);
 
 -- --------------------------------------------------------
 
@@ -146,7 +186,9 @@ CREATE TABLE `cotizaciones` (
   `total` decimal(10,2) NOT NULL,
   `fecha` date NOT NULL,
   `hora` time NOT NULL,
-  `validez` int(11) NOT NULL,
+  `metodo` varchar(20) NOT NULL,
+  `validez` varchar(30) NOT NULL,
+  `descuento` decimal(10,2) NOT NULL DEFAULT 0.00,
   `id_cliente` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -159,9 +201,25 @@ CREATE TABLE `cotizaciones` (
 CREATE TABLE `creditos` (
   `id` int(11) NOT NULL,
   `monto` decimal(10,2) NOT NULL,
-  `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `fecha` date NOT NULL,
+  `hora` time NOT NULL,
   `estado` int(11) NOT NULL DEFAULT 1,
   `id_venta` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `detalle_apartado`
+--
+
+CREATE TABLE `detalle_apartado` (
+  `id` int(11) NOT NULL,
+  `monto` decimal(10,2) NOT NULL,
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `apertura` int(11) NOT NULL DEFAULT 1,
+  `id_apartado` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -174,7 +232,9 @@ CREATE TABLE `gastos` (
   `id` int(11) NOT NULL,
   `monto` decimal(10,2) NOT NULL,
   `descripcion` varchar(255) NOT NULL,
+  `foto` varchar(150) DEFAULT NULL,
   `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `apertura` int(11) NOT NULL DEFAULT 1,
   `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -186,9 +246,11 @@ CREATE TABLE `gastos` (
 
 CREATE TABLE `inventario` (
   `id` int(11) NOT NULL,
-  `entradas` int(11) NOT NULL DEFAULT 0,
-  `salidas` int(11) NOT NULL DEFAULT 0,
-  `fecha` date NOT NULL,
+  `movimiento` varchar(100) NOT NULL,
+  `accion` varchar(20) NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  `stock_actual` int(11) NOT NULL,
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `id_producto` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -206,6 +268,39 @@ CREATE TABLE `medidas` (
   `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `estado` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `permisos`
+--
+
+CREATE TABLE `permisos` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `permisos`
+--
+
+INSERT INTO `permisos` (`id`, `nombre`) VALUES
+(1, 'usuarios'),
+(2, 'roles'),
+(3, 'configuracion'),
+(4, 'log de acceso'),
+(5, 'medidas'),
+(6, 'categorias'),
+(7, 'productos'),
+(8, 'clientes'),
+(9, 'proveedores'),
+(10, 'cajas'),
+(11, 'compras'),
+(12, 'ventas'),
+(13, 'credito ventas'),
+(14, 'cotizaciones'),
+(15, 'apartados'),
+(16, 'inventario');
 
 -- --------------------------------------------------------
 
@@ -239,10 +334,33 @@ CREATE TABLE `proveedor` (
   `ruc` varchar(15) NOT NULL,
   `nombre` varchar(255) NOT NULL,
   `telefono` varchar(50) NOT NULL,
+  `correo` varchar(100) NOT NULL,
   `direccion` varchar(255) NOT NULL,
   `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `estado` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `roles`
+--
+
+CREATE TABLE `roles` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `permisos` text DEFAULT NULL,
+  `estado` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `roles`
+--
+
+INSERT INTO `roles` (`id`, `nombre`, `permisos`, `estado`) VALUES
+(1, 'ADMINISTRADOR', '[\"usuarios\",\"roles\",\"configuracion\",\"log de acceso\",\"medidas\",\"categorias\",\"productos\",\"clientes\",\"proveedores\",\"cajas\",\"compras\",\"ventas\",\"credito ventas\",\"cotizaciones\",\"apartados\",\"inventario\"]', 1),
+(2, 'SUPERVISOR', '[\"cajas\",\"inventario\"]', 1),
+(3, 'vendedor', '[\"productos\",\"clientes\",\"ventas\",\"cotizaciones\"]', 1);
 
 -- --------------------------------------------------------
 
@@ -255,7 +373,7 @@ CREATE TABLE `usuarios` (
   `nombre` varchar(100) NOT NULL,
   `apellido` varchar(100) NOT NULL,
   `correo` varchar(100) NOT NULL,
-  `telefono` varchar(50) NOT NULL,
+  `telefono` varchar(15) NOT NULL,
   `direccion` varchar(255) NOT NULL,
   `perfil` varchar(100) DEFAULT NULL,
   `clave` varchar(200) NOT NULL,
@@ -270,7 +388,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nombre`, `apellido`, `correo`, `telefono`, `direccion`, `perfil`, `clave`, `token`, `fecha`, `estado`, `rol`) VALUES
-(1, 'Ever', 'benitez', 'everbenitez@gmail.com', '0971104575', 'pilar', '', '$2y$10$RXYIVryqI5ianMFnWh9XUOodBz4bCk.rs8TD9UBroxmIjtUiC6liK', '', '2023-10-02 20:14:48', 1, 1);
+(4, 'Ever', 'Benitez', 'informaticoebz@gmail.com', '0971104575', 'Pilar', NULL, '$2y$10$4WlRlV8wYvC6HMfOBnAjse/eRdKg2YZPwr6uvj4r0u73UmdIXM/CS', NULL, '2023-10-21 19:47:09', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -284,6 +402,10 @@ CREATE TABLE `ventas` (
   `total` decimal(10,2) NOT NULL,
   `fecha` date NOT NULL,
   `hora` time NOT NULL,
+  `metodo` varchar(15) NOT NULL,
+  `descuento` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `serie` varchar(20) NOT NULL,
+  `pago` decimal(10,2) NOT NULL,
   `estado` int(11) NOT NULL DEFAULT 1,
   `apertura` int(11) NOT NULL DEFAULT 1,
   `id_cliente` int(11) NOT NULL,
@@ -300,6 +422,12 @@ CREATE TABLE `ventas` (
 ALTER TABLE `abonos`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_credito` (`id_credito`);
+
+--
+-- Indices de la tabla `acceso`
+--
+ALTER TABLE `acceso`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `apartados`
@@ -356,6 +484,12 @@ ALTER TABLE `creditos`
   ADD KEY `id_venta` (`id_venta`);
 
 --
+-- Indices de la tabla `detalle_apartado`
+--
+ALTER TABLE `detalle_apartado`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `gastos`
 --
 ALTER TABLE `gastos`
@@ -377,6 +511,12 @@ ALTER TABLE `medidas`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `permisos`
+--
+ALTER TABLE `permisos`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `productos`
 --
 ALTER TABLE `productos`
@@ -391,10 +531,17 @@ ALTER TABLE `proveedor`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `rol` (`rol`);
 
 --
 -- Indices de la tabla `ventas`
@@ -413,6 +560,12 @@ ALTER TABLE `ventas`
 --
 ALTER TABLE `abonos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `acceso`
+--
+ALTER TABLE `acceso`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `apartados`
@@ -448,7 +601,7 @@ ALTER TABLE `compras`
 -- AUTO_INCREMENT de la tabla `configuracion`
 --
 ALTER TABLE `configuracion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `cotizaciones`
@@ -460,6 +613,12 @@ ALTER TABLE `cotizaciones`
 -- AUTO_INCREMENT de la tabla `creditos`
 --
 ALTER TABLE `creditos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `detalle_apartado`
+--
+ALTER TABLE `detalle_apartado`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -481,6 +640,12 @@ ALTER TABLE `medidas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `permisos`
+--
+ALTER TABLE `permisos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
@@ -493,10 +658,16 @@ ALTER TABLE `proveedor`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `ventas`
@@ -564,6 +735,12 @@ ALTER TABLE `inventario`
 ALTER TABLE `productos`
   ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`id_categoria`) REFERENCES `categorias` (`id`),
   ADD CONSTRAINT `productos_ibfk_2` FOREIGN KEY (`id_medida`) REFERENCES `medidas` (`id`);
+
+--
+-- Filtros para la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`rol`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `ventas`

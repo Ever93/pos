@@ -1,7 +1,8 @@
 <?php
+date_default_timezone_set('America/Lima');
 require_once 'config/Config.php';
 require_once 'config/Helpers.php';
-$ruta = (!empty($_GET['url'])) ? $_GET['url'] : 'home/index';
+$ruta = (!empty($_GET['url'])) ? $_GET['url'] : 'principal/index';
 $array = explode('/', $ruta);
 $controller = ucfirst($array[0]);
 $metodo = 'index';
@@ -25,11 +26,11 @@ if (file_exists($dirControllorer)) {
     require_once $dirControllorer;
     $controller = new $controller();
     if (method_exists($controller, $metodo)) {
-    $controller->$metodo($parametro);
+       $controller->$metodo($parametro);
     }else{
-        echo 'No existe el metodo';
+        header('Location: ' . BASE_URL . 'principal/errors');
     }
 }else{
-    echo 'No existe el controlador';
+    header('Location: ' . BASE_URL . 'principal/errors');
 }
 ?>

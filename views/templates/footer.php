@@ -123,11 +123,22 @@
 <script src="<?php echo BASE_URL; ?>assets/DataTables/datatables.min.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/js/botones-perzonalizados.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/js/sweetalert2.all.min.js"></script>
+<script src="<?php echo BASE_URL; ?>assets/js/ckeditor.js"></script>
+<script src="<?php echo BASE_URL; ?>assets/js/funciones.js"></script>
+<script src="<?php echo BASE_URL; ?>assets/js/jquery-ui.min.js"></script>
+<script src="<?php echo BASE_URL; ?>assets/plugins/fullcalendar/js/main.min.js"></script>
+<script src="<?php echo BASE_URL; ?>assets/js/es.js"></script>
 <script>
     const base_url = '<?php echo BASE_URL; ?>';
 </script>
-<?php if (!empty($data['script'])) {?>
-    <script src="<?php echo BASE_URL . 'assets/js/modulos/' . $data['script'] ; ?>"></script>
+<?php if (!empty($data['busqueda'])) { ?>
+    <script>
+        const nombreKey = '<?php echo $data['carrito']; ?>';
+    </script>
+    <script src="<?php echo BASE_URL . 'assets/js/' . $data['busqueda']; ?>"></script>
+<?php } ?>
+<?php if (!empty($data['script'])) { ?>
+    <script src="<?php echo BASE_URL . 'assets/js/modulos/' . $data['script']; ?>"></script>
 <?php } ?>
 </body>
 

@@ -39,7 +39,7 @@
                                     <div class="text-center">
                                         <h3 class="">Iniciar Sesión</h3>
                                     </div>
-                                    <div class="login-separater text-center mb-4"> <span>OR SIGN IN WITH EMAIL</span>
+                                    <div class="login-separater text-center mb-4"> <span>Session con Correo Electrónico</span>
                                         <hr />
                                     </div>
                                     <div class="form-body">

@@ -23,7 +23,8 @@ class Usuarios extends Controller
                 $data[$i]['rol'] = '<span class="badge bg-info">VENDEDOR</span>';
             }
             $data[$i]['acciones'] = '<div>
-            <button class="btn btn-danger" type="button" onclick="eliminarUsuario('.$data[$i]['id'].')"> <i class="fas fa-times-circle"></i></button>
+            <button class="btn btn-danger" type="button" onclick="eliminarUsuario(' . $data[$i]['id'] . ')"> <i class="fas fa-times-circle"></i></button>
+            <button class="btn btn-info" type="button" onclick="editarUsuario(' . $data[$i]['id'] . ')"> <i class="fas fa-edit"></i></button>
             </div>';
         }
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
@@ -54,25 +55,47 @@ class Usuarios extends Controller
                 $telefono = strClean($_POST['telefono']);
                 $direccion = strClean($_POST['direccion']);
                 $clave = strClean($_POST['clave']);
-                $hash = password_hash($clave, PASSWORD_DEFAULT);
+                
                 $rol = strClean($_POST['rol']);
+                $id = strClean($_POST['id']);
 
-                //verificar si existe los datos
-                $verificarCorreo = $this->model->getValidar('correo', $correo);
-                if (empty($verificarCorreo)) {
-                    $verificarTel = $this->model->getValidar('telefono', $telefono);
-                    if (empty($verificarTel)) {
-                        $data = $this->model->registrar($nombres, $apellidos, $correo, $telefono, $direccion, $hash, $rol);
-                        if ($data > 0) {
-                            $res = array('msg' => 'Usuario Registrado', 'type' => 'success');
+                if ($id == '') {
+                    $hash = password_hash($clave, PASSWORD_DEFAULT);
+                    //verificar si existe los datos
+                    $verificarCorreo = $this->model->getValidar('correo', $correo, 'registrar', 0);
+                    if (empty($verificarCorreo)) {
+                        $verificarTel = $this->model->getValidar('telefono', $telefono, 'registrar', 0);
+                        if (empty($verificarTel)) {
+                            $data = $this->model->registrar($nombres, $apellidos, $correo, $telefono, $direccion, $hash, $rol);
+                            if ($data > 0) {
+                                $res = array('msg' => 'Usuario Registrado', 'type' => 'success');
+                            } else {
+                                $res = array('msg' => 'Error al registrar', 'type' => 'error');
+                            }
                         } else {
-                            $res = array('msg' => 'Error al registrar', 'type' => 'error');
+                            $res = array('msg' => 'El telefono debe ser unico', 'type' => 'warning');
                         }
                     } else {
-                        $res = array('msg' => 'El telefono debe ser unico', 'type' => 'warning');
+                        $res = array('msg' => 'El correo debe ser unico', 'type' => 'warning');
                     }
                 } else {
-                    $res = array('msg' => 'El correo debe ser unico', 'type' => 'warning');
+                    //verificar si existe los datos
+                    $verificarCorreo = $this->model->getValidar('correo', $correo, 'modificar', $id);
+                    if (empty($verificarCorreo)) {
+                        $verificarTel = $this->model->getValidar('telefono', $telefono, 'modificar', $id);
+                        if (empty($verificarTel)) {
+                            $data = $this->model->actualizar($nombres, $apellidos, $correo, $telefono, $direccion, $rol, $id);
+                            if ($data > 0) {
+                                $res = array('msg' => 'Usuario Actualizado', 'type' => 'success');
+                            } else {
+                                $res = array('msg' => 'Error al actualizar', 'type' => 'error');
+                            }
+                        } else {
+                            $res = array('msg' => 'El telefono debe ser unico', 'type' => 'warning');
+                        }
+                    } else {
+                        $res = array('msg' => 'El correo debe ser unico', 'type' => 'warning');
+                    }
                 }
             }
         } else {
@@ -91,14 +114,20 @@ class Usuarios extends Controller
                     $res = array('msg' => 'Usuario dado de baja', 'type' => 'success');
                 } else {
                     $res = array('msg' => 'Error al eliminar', 'type' => 'error');
-                }    
-            }else {
+                }
+            } else {
                 $res = array('msg' => 'Error Desconocido', 'type' => 'error');
             }
-        }else {
+        } else {
             $res = array('msg' => 'El nombre es requerido', 'type' => 'warning');
         }
         echo json_encode($res, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+    public function editar($id)
+    {
+        $data = $this->model->editar($id);
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
         die();
     }
 }

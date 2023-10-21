@@ -7,6 +7,7 @@ const telefono = document.querySelector('#telefono');
 const direccion = document.querySelector('#direccion');
 const clave = document.querySelector('#clave');
 const rol = document.querySelector('#rol');
+const id = document.querySelector('#id');
 
 //elementos para mostrar errores
 const errorNombre = document.querySelector('#errorNombre');
@@ -16,6 +17,8 @@ const errorTelefono = document.querySelector('#errorTelefono');
 const errorDireccion = document.querySelector('#errorDireccion');
 const errorClave = document.querySelector('#errorClave');
 const errorRol = document.querySelector('#errorRol');
+
+const btnAccion = document.querySelector('#btnAccion');
 
 document.addEventListener('DOMContentLoaded', function () {
     //cargar datos con plugin datatable
@@ -134,4 +137,33 @@ function eliminarUsuario(idUsuario) {
             }
         }
     })
+}
+//funcion para recuperar los datos
+function editarUsuario(idUsuario) {
+    const url = base_url + 'usuarios/editar/' + idUsuario;
+    //hacer una instancia del objeto XMLHttpRequest 
+    const http = new XMLHttpRequest();
+    //Abrir una Conexion - POST - GET
+    http.open('GET', url, true);
+    //Enviar Datos
+    http.send();
+    //verificar estados
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const res = JSON.parse(this.responseText);
+            id.value = res.id;
+            nombres.value = res.nombre;
+            apellidos.value = res.apellido;
+            correo.value = res.correo;
+            telefono.value = res.telefono;
+            direccion.value = res.direccion;
+            rol.value = res.rol;
+            clave.value = '0000000';
+            clave.setAttribute('readonly', 'readonly');
+            btnAccion.textContent = 'Actualizar';
+            const firstTabEl = document.querySelector('#nav-tab button:last-child')
+            const firstTab = new bootstrap.Tab(firstTabEl)
+            firstTab.show()
+        }
+    }
 }

@@ -33,6 +33,7 @@
             </div>
             <div class="tab-pane fade" id="nav-nuevo" role="tabpanel" aria-labelledby="nav-nuevo-tab" tabindex="0">
                 <form class="p-4" id="formulario" autocomplete="off">
+                    <input type="hidden" id="id" name="id">
                     <div class="row">
                         <div class="col-lg-4 col-sm-6 mb-2">
                             <label>Nombres</label>

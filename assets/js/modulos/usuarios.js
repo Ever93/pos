@@ -58,19 +58,19 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         limpiarCampos();
         if (nombres.value == '') {
-            errorNombre.textContent = 'EL NOMBRE ES REQUERIDO';
+            errorNombre.textContent = 'El nombre es requerido';
         } else if (apellidos.value == '') {
-            errorApellido.textContent = 'EL APELLIDO ES REQUERIDO';
+            errorApellido.textContent = 'El apellido es requerido';
         } else if (correo.value == '') {
-            errorCorreo.textContent = 'EL CORREO ES REQUERIDO';
+            errorCorreo.textContent = 'El correo es requerido';
         } else if (telefono.value == '') {
-            errorTelefono.textContent = 'EL TELEFONO ES REQUERIDO';
+            errorTelefono.textContent = 'El telefono es requerido';
         } else if (direccion.value == '') {
-            errorDireccion.textContent = 'LA DIRECCION ES REQUERIDO';
+            errorDireccion.textContent = 'La direccion es requerida';
         } else if (clave.value == '') {
-            errorClave.textContent = 'LA CONTRASEÑA ES REQUERIDO';
+            errorClave.textContent = 'La contraseña es requerida';
         } else if (rol.value == '') {
-            errorRol.textContent = 'EL ROL ES REQUERIDO';
+            errorRol.textContent = 'El rol es requerido';
         } else {
             const url = base_url + 'usuarios/registrar';
             insertarRegistros(url, this, tblUsuarios, btnAccion, true);
